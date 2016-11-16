@@ -39,27 +39,25 @@ function deleteItemFromArray(index){
   state.items.splice(index, 1);
 }
 
-
-
 //Render state
 
 function renderList(selector) {
-  var listHTML = [];
-  for (var i = 0; i < state.items.length; i++) {
-    listHTML.push(
-      '<li class='+'"shoppingItem'+ i +'"">'+
-      '<span class="shopping-item" id="' + i + '">' + state.items[i].name + '</span>' +
-      '<div class="shopping-item-controls">' +
-      '<button class="shopping-item-toggle" id="' + i + '">' +
-      '<span class="button-label">check</span>' +
-      '</button>'+
-      '<button class="shopping-item-delete" id="' + i + '">' +
-      '<span class="button-label">delete</span>' +
-      '</button>' +
-      '</div>' +
-      '</li>'
-    )};
-  return $(selector).html(listHTML);
+  var id = state.items.length - 1;
+  var userInput = state.items[id].name;
+  var listHTML = (
+        '<li class='+'"shoppingItem'+ id +'"">'+
+        '<span class="shopping-item" id="' + id + '">' + userInput + '</span>' +
+        '<div class="shopping-item-controls">' +
+        '<button class="shopping-item-toggle" id="' + id + '">' +
+        '<span class="button-label">check</span>' +
+        '</button>'+
+        '<button class="shopping-item-delete" id="' + id + '">' +
+        '<span class="button-label">delete</span>' +
+        '</button>' +
+        '</div>' +
+        '</li>'
+      )
+  return $(selector).append(listHTML);
 };
 
 function checkItem(selector) {
@@ -72,29 +70,63 @@ function deleteItem(selector){
 
 //Event listeners
 
-$('#js-shopping-list-form').on('submit', function(event){
-  event.preventDefault();
-  var name = $('#shopping-list-entry').val();
-  addNewItem(name);
-  renderList($('.shopping-list'));
+$(document).ready(function() {
+  var parent = '#shoppping-wrapper';
 
-  $('.shopping-item-toggle').on('click', function(event){
+  $(parent).on('submit', '#js-shopping-list-form', function(event){
+    event.preventDefault();
+    var userInput = $('#shopping-list-entry').val();
+    addNewItem(userInput);
+    renderList('.shopping-list');
+    $('#shopping-list-entry').val("");
+  });
+
+  $(parent).on('click', '.shopping-item-toggle', function(event) {
     var itemId = '.shopping-item' + '[id='+$(this).attr('id')+']';
-    console.log(itemId);
     checkItem(itemId);
   });
 
-  $('.shopping-item-delete').on('click', function(event){
+  $(parent).on('click', '.shopping-item-delete', function(event) {
     var index = $(this).attr('id');
     deleteItemFromArray(index);
-  });
-
-  $('.shopping-item-delete').on('click', function(event){
     var selector = $(this).closest("li");
     deleteItem(selector);
   });
 
 });
+
+
+
+//
+// $('#js-shopping-list-form').on('submit', function(event){
+//   event.preventDefault();
+//   var name = $('#shopping-list-entry').val();
+//   addNewItem(name);
+//   renderList($('.shopping-list'));
+//
+//   $('.shopping-item-toggle').on('click', function(event){
+//     var itemId = '.shopping-item' + '[id='+$(this).attr('id')+']';
+//     console.log(itemId);
+//     checkItem(itemId);
+//   });
+//
+//   $('.shopping-item-delete').on('click', function(event){
+//     var index = $(this).attr('id');
+//     deleteItemFromArray(index);
+//   });
+//
+//   $('.shopping-item-delete').on('click', function(event){
+//     var selector = $(this).closest("li");
+//     deleteItem(selector);
+//   });
+//
+// });
+
+// $("#shoppping-wrapper").on('click', '.shopping-item-toggle', function(){
+//   console.log($(this));
+// })
+
+// $(this).parents('li').find('.shopping-item').addClass('shopping-item__checked')
 
 
 // //adds item to the storage
@@ -114,7 +146,7 @@ $('#js-shopping-list-form').on('submit', function(event){
 //
 // //check item by appending class
 // function checkItem(selector){
-//   debugger
+//
 //   selector.closest('span').toggleClass('shopping-item__checked');
 // };
 //
@@ -127,7 +159,25 @@ $('#js-shopping-list-form').on('submit', function(event){
 // });
 //
 // $('.shopping-item-toggle').on('click', function(event){
-//   debugger
+//
 //   var selector = $(this);
 //   checkItem(selector);
 // });
+
+
+
+// for (var i = 0; i < state.items.length; i++) {
+//   listHTML.push(
+//     '<li class='+'"shoppingItem'+ i +'"">'+
+//     '<span class="shopping-item" id="' + i + '">' + state.items[i].name + '</span>' +
+//     '<div class="shopping-item-controls">' +
+//     '<button class="shopping-item-toggle" id="' + i + '">' +
+//     '<span class="button-label">check</span>' +
+//     '</button>'+
+//     '<button class="shopping-item-delete" id="' + i + '">' +
+//     '<span class="button-label">delete</span>' +
+//     '</button>' +
+//     '</div>' +
+//     '</li>'
+//   )};
+// return $(selector).html(listHTML);
